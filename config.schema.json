@@ -1,0 +1,18 @@
+{
+  "pluginAlias": "NB",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Homebridge plugin for Nuki Bridge",
+  "footerDisplay": "",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Plugin name as displayed in the homebridge log.",
+        "type": "string",
+        "required": true,
+        "default": "Nuki"
+      }
+    }
+  }
+}
