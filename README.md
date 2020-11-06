@@ -56,6 +56,8 @@ Homebridge NB communicates with the Nuki Bridge using the local
 [Nuki Bridge HTTP API](https://developer.nuki.io/page/nuki-bridge-http-api-1-12/4).
 You need to enable this API through the Nuki app.
 
+Use [Eve](https://www.evehome.com/en/eve-app) to get the full functionality, like history for the door sensor, and support for _Ring to Open_ and _Continuous Mode_ on the Opener.
+
 ### Command-Line Tool
 Homebridge NB includes a command-line tool, `nb`,
 to interact with the Nuki Bridge from the comand line.
