@@ -33,7 +33,9 @@ In future, this accessory might become a separate bridge.
 service to control the lock, and a _Battery_ service for the battery.
 The when present and configured, door sensor is exposed as separate
 _Contact Sensor_ service, including Eve history.
-- Expose each Nuki Openers as separate accessory, with t.b.d. services.
+- Expose each Nuki Opener as separate accessory, with a _Doorbell_ service for
+the ringer, a _Lock Mechanism_ service for the opener, and a _Battery_ Service
+for the battery.
 - Zero configuration:
   - Automatic discovery of Nuki Bridge and paired Smart Lock and Opener devices.
   - Automatic configuration of API token.
@@ -41,7 +43,6 @@ The token is persisted across Homebridge restarts (in the Bridge accessory).
 - Technical:
   - Use local API provided by the Nuki Bridge; no Internet connection needed
 (except for discovery of the Bridge).
-Use local API.
   - Use hashed tokens for added security.
   - Subscribe to Nuki Bridge for notifications on device state changes.
   - Use _Identify_ on the Smart Lock and Opener accessories to force the Bridge
