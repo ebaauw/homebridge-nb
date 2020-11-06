@@ -85,15 +85,3 @@ plugin.
     }
   ]
 ```
-
-Homebridge NB should discover your bridge through the `api.nuki.io` web portal.
-If it doesn't you can specify the bridge IP address and port under the `hosts` key:
-
-```json
-  "platforms": [
-    {
-      "platform": "NB",
-      "hosts": ["192.168.1.100:8080"]
-    }
-  ]
-```
