@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="homebridge-nk.png" height="200px">  
+  <img src="homebridge-nb.png" height="200px">  
 </p>
 <span align="center">
 
