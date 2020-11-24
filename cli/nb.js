@@ -296,7 +296,13 @@ class Main extends homebridgeLib.CommandLineTool {
     }
     parser.help('h', 'help', help.nb)
     parser.version('V', 'version')
-    parser.flag('D', 'debug', () => { this.setOptions({ debug: true }) })
+    parser.flag('D', 'debug', () => {
+      if (this.debugEnabled) {
+        this.setOptions({ vdebug: true })
+      } else {
+        this.setOptions({ debug: true })
+      }
+    })
     parser.option('H', 'host', (value) => {
       homebridgeLib.OptionParser.toHost('host', value, true)
       clargs.options.host = value
@@ -334,11 +340,16 @@ class Main extends homebridgeLib.CommandLineTool {
           this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
         }
         this.client = new NbClient(clargs.options)
-        this.client.on('request', (id, method, resource) => {
-          this.debug('request %d: %s %s', id, method, resource)
+        this.client.on('request', (id, method, resource, body, url) => {
+          this.debug('nuki bridge request %d: %s %s', id, method, resource)
+          this.vdebug('nuki bridge request %d: %s %s', id, method, url)
         })
-        this.client.on('response', (id, response) => {
-          this.debug('request %d: %j', id, response)
+        this.client.on('response', (id, code, message, body) => {
+          this.vdebug('nuki bridge request %d: response: %j', id, body)
+          this.debug('nuki bridge request %d: %d %s', id, code, message)
+        })
+        this.client.on('error', (error, id, method, resource, body, url) => {
+          this.error(error)
         })
         if (clargs.options.token == null && clargs.command !== 'auth') {
           let args = ''
@@ -369,6 +380,17 @@ class Main extends homebridgeLib.CommandLineTool {
     })
     this.parser.parse(...args)
     const nbDiscovery = new NbDiscovery(options)
+    nbDiscovery.on('request', (id, method, resource, body, url) => {
+      this.debug('nuki server request %d: %s %s', id, method, resource)
+      this.vdebug('nuki server request %d: %s %s', id, method, url)
+    })
+    nbDiscovery.on('response', (id, code, message, body) => {
+      this.vdebug('nuki server request %d: response: %j', id, body)
+      this.debug('nuki server request %d: %d %s', id, code, message)
+    })
+    nbDiscovery.on('error', (error, id, method, resource, body, url) => {
+      this.error(error)
+    })
     const bridges = await nbDiscovery.discover()
     this.print(this.jsonFormatter.stringify(bridges))
   }
