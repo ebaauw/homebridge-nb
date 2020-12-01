@@ -325,9 +325,6 @@ class Main extends homebridgeLib.CommandLineTool {
     })
     parser.remaining((list) => { clargs.args = list })
     parser.parse()
-    if (clargs.options.host.split(':').length === 1) {
-      clargs.options.host += ':8080'
-    }
     return clargs
   }
 
@@ -338,6 +335,9 @@ class Main extends homebridgeLib.CommandLineTool {
       if (clargs.command !== 'discover') {
         if (clargs.options.host == null) {
           this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
+        }
+        if (clargs.options.host.split(':').length === 1) {
+          clargs.options.host += ':8080'
         }
         this.client = new NbClient(clargs.options)
         this.client.on('request', (id, method, resource, body, url) => {
