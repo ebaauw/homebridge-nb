@@ -35,7 +35,7 @@ const usage = {
   lockState: `${b('lockState')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')}`,
   lock: `${b('lock')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')}`,
   unlock: `${b('unlock')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')}`,
-  lockAction: `${b('lockState')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')} ${u('action')}`,
+  lockAction: `${b('lockAction')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')} ${u('action')}`,
 
   eventlog: `${b('eventlog')} [${b('-hns')}]`,
   callbackList: `${b('callbackList')} [${b('-h')}]`,
