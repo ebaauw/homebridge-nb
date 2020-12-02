@@ -336,9 +336,6 @@ class Main extends homebridgeLib.CommandLineTool {
         if (clargs.options.host == null) {
           this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
         }
-        if (clargs.options.host.split(':').length === 1) {
-          clargs.options.host += ':8080'
-        }
         this.client = new NbClient(clargs.options)
         this.client.on('request', (id, method, resource, body, url) => {
           this.debug('nuki bridge request %d: %s %s', id, method, resource)
