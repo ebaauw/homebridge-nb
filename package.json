@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "homebridge-lib": "^5.0.0"
+    "homebridge-lib": "^4.8.2"
   },
   "scripts": {
     "prepare": "standard",
