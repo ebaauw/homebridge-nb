@@ -304,7 +304,7 @@ class Main extends homebridgeLib.CommandLineTool {
       }
     })
     parser.option('H', 'host', (value) => {
-      homebridgeLib.OptionParser.toHost('host', value, true)
+      homebridgeLib.OptionParser.toHost('host', value, false, true)
       clargs.options.host = value
     })
     parser.option('t', 'timeout', (value) => {
@@ -336,6 +336,9 @@ class Main extends homebridgeLib.CommandLineTool {
         if (clargs.options.host == null) {
           this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
         }
+        if (clargs.command === 'auth') {
+          clargs.options.timeout = 30
+        }
         this.client = new NbClient(clargs.options)
         this.client.on('request', (id, method, resource, body, url) => {
           this.debug('nuki bridge request %d: %s %s', id, method, resource)
@@ -344,9 +347,6 @@ class Main extends homebridgeLib.CommandLineTool {
         this.client.on('response', (id, code, message, body) => {
           this.vdebug('nuki bridge request %d: response: %j', id, body)
           this.debug('nuki bridge request %d: %d %s', id, code, message)
-        })
-        this.client.on('error', (error, id, method, resource, body, url) => {
-          this.error(error)
         })
         if (clargs.options.token == null && clargs.command !== 'auth') {
           let args = ''
@@ -394,12 +394,9 @@ class Main extends homebridgeLib.CommandLineTool {
 
   async auth (...args) {
     this.parser.parse(...args)
-    try {
-      const token = await this.client.auth()
-      this.print(token)
-    } catch (error) {
-      this.error(error)
-    }
+    this.log('press button on Nuki bridge to obtain token')
+    const token = await this.client.auth()
+    this.print(token)
   }
 
   async info (...args) {
