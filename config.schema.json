@@ -12,6 +12,17 @@
         "type": "string",
         "required": true,
         "default": "Nuki"
+      },
+      "latch": {
+        "description": "Expose a second <i>Lock Mechanism</i> service to unlatch a Smart Lock.",
+        "type": "boolean"
+      },
+      "timeout":
+      {
+        "description": "The timeout in seconds to wait for a response from a Nuki bridge.  Default: 15.",
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 60
       }
     }
   }
