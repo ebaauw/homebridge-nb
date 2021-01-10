@@ -1,5 +1,5 @@
 // homebridge-nb/index.js
-// Copyright © 2020 Erik Baauw. All rights reserved.
+// Copyright © 2020-2021 Erik Baauw. All rights reserved.
 //
 // Homebridge plug-in for Nuki Bridge.
 
