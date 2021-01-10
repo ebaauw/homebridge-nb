@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // homebridge-nb/cli/nb.js
-// Copyright © 2020 Erik Baauw. All rights reserved.
+// Copyright © 2020-2021 Erik Baauw. All rights reserved.
 //
 // Homebridge plug-in for Nuki Bridge.
 
@@ -294,37 +294,38 @@ class Main extends homebridgeLib.CommandLineTool {
         token: process.env.NB_TOKEN
       }
     }
-    parser.help('h', 'help', help.nb)
-    parser.version('V', 'version')
-    parser.flag('D', 'debug', () => {
-      if (this.debugEnabled) {
-        this.setOptions({ vdebug: true })
-      } else {
-        this.setOptions({ debug: true })
-      }
-    })
-    parser.option('H', 'host', (value) => {
-      homebridgeLib.OptionParser.toHost('host', value, false, true)
-      clargs.options.host = value
-    })
-    parser.option('t', 'timeout', (value) => {
-      clargs.options.timeout = homebridgeLib.OptionParser.toInt(
-        'timeout', value, 1, 60, true
-      )
-    })
-    parser.option('T', 'token', (value) => {
-      clargs.options.token = homebridgeLib.OptionParser.toString(
-        'token', value, true, true
-      )
-    })
-    parser.parameter('command', (value) => {
-      if (usage[value] == null || typeof this[value] !== 'function') {
-        throw new UsageError(`${value}: unknown command`)
-      }
-      clargs.command = value
-    })
-    parser.remaining((list) => { clargs.args = list })
-    parser.parse()
+    parser
+      .help('h', 'help', help.nb)
+      .version('V', 'version')
+      .flag('D', 'debug', () => {
+        if (this.debugEnabled) {
+          this.setOptions({ vdebug: true })
+        } else {
+          this.setOptions({ debug: true, chalk: true })
+        }
+      })
+      .option('H', 'host', (value) => {
+        homebridgeLib.OptionParser.toHost('host', value, false, true)
+        clargs.options.host = value
+      })
+      .option('t', 'timeout', (value) => {
+        clargs.options.timeout = homebridgeLib.OptionParser.toInt(
+          'timeout', value, 1, 60, true
+        )
+      })
+      .option('T', 'token', (value) => {
+        clargs.options.token = homebridgeLib.OptionParser.toString(
+          'token', value, true, true
+        )
+      })
+      .parameter('command', (value) => {
+        if (usage[value] == null || typeof this[value] !== 'function') {
+          throw new UsageError(`${value}: unknown command`)
+        }
+        clargs.command = value
+      })
+      .remaining((list) => { clargs.args = list })
+      .parse()
     return clargs
   }
 
@@ -339,15 +340,38 @@ class Main extends homebridgeLib.CommandLineTool {
         if (clargs.command === 'auth') {
           clargs.options.timeout = 30
         }
+        const name = clargs.options.host
         this.client = new NbClient(clargs.options)
-        this.client.on('request', (id, method, resource, body, url) => {
-          this.debug('nuki bridge request %d: %s %s', id, method, resource)
-          this.vdebug('nuki bridge request %d: %s %s', id, method, url)
-        })
-        this.client.on('response', (id, code, message, body) => {
-          this.vdebug('nuki bridge request %d: response: %j', id, body)
-          this.debug('nuki bridge request %d: %d %s', id, code, message)
-        })
+        this.client
+          .on('error', (error) => {
+            this.log(
+              '%s: request %d: %s %s', name, error.request.id,
+              error.request.method, error.request.resource
+            )
+            this.warn(
+              '%s: request %d: error: %s', name, error.requestid, error
+            )
+          })
+          .on('request', (request) => {
+            this.debug(
+              '%s: request %d: %s %s', name, request.id,
+              request.method, request.resource
+            )
+            this.vdebug(
+              '%s: request %d: %s %s', name, request.id,
+              request.method, request.url
+            )
+          })
+          .on('response', (response) => {
+            this.vdebug(
+              '%s: request %d: response: %j', name, response.request.id,
+              response.body
+            )
+            this.debug(
+              '%s: request %d: %d %s', name, response.request.id,
+              response.statusCode, response.statusMessage
+            )
+          })
         if (clargs.options.token == null && clargs.command !== 'auth') {
           let args = ''
           if (clargs.options.host !== process.env.NB_HOST) {
@@ -370,24 +394,44 @@ class Main extends homebridgeLib.CommandLineTool {
 
   async discover (...args) {
     const options = {}
-    this.parser.option('t', 'timeout', (value, key) => {
-      options.timeout = homebridgeLib.OptionParser.toInt(
-        'timeout', value, 1, 60, true
-      )
-    })
-    this.parser.parse(...args)
+    this.parser
+      .option('t', 'timeout', (value, key) => {
+        options.timeout = homebridgeLib.OptionParser.toInt(
+          'timeout', value, 1, 60, true
+        )
+      })
+      .parse(...args)
     const nbDiscovery = new NbDiscovery(options)
-    nbDiscovery.on('request', (id, method, resource, body, url) => {
-      this.debug('nuki server request %d: %s %s', id, method, resource)
-      this.vdebug('nuki server request %d: %s %s', id, method, url)
-    })
-    nbDiscovery.on('response', (id, code, message, body) => {
-      this.vdebug('nuki server request %d: response: %j', id, body)
-      this.debug('nuki server request %d: %d %s', id, code, message)
-    })
-    nbDiscovery.on('error', (error, id, method, resource, body, url) => {
-      this.error(error)
-    })
+    nbDiscovery
+      .on('error', (error) => {
+        this.log(
+          'nuki server: request %d: %s %s', error.request.id,
+          error.request.method, error.request.resource
+        )
+        this.warn(
+          'nuki server: request %d: error: %s', error.requestid, error
+        )
+      })
+      .on('request', (request) => {
+        this.debug(
+          'nuki server: request %d: %s %s', request.id,
+          request.method, request.resource
+        )
+        this.vdebug(
+          'nuki server: request %d: %s %s', request.id,
+          request.method, request.url
+        )
+      })
+      .on('response', (response) => {
+        this.vdebug(
+          'nuki server: request %d: response: %j', response.request.id,
+          response.body
+        )
+        this.debug(
+          'nuki server: request %d: %d %s', response.request.id,
+          response.statusCode, response.statusMessage
+        )
+      })
     const bridges = await nbDiscovery.discover()
     this.print(this.jsonFormatter.stringify(bridges))
   }
@@ -432,17 +476,18 @@ class Main extends homebridgeLib.CommandLineTool {
   async lockState (...args) {
     let nukiId
     let deviceType
-    this.parser.parameter('nukiId', (value) => {
-      nukiId = homebridgeLib.OptionParser.toInt(
-        'nukiId', value, 0, Infinity, true
-      )
-    })
-    this.parser.parameter('deviceType', (value) => {
-      deviceType = homebridgeLib.OptionParser.toInt(
-        'deviceType', value, 0, 2, true
-      )
-    })
-    this.parser.parse(...args)
+    this.parser
+      .parameter('nukiId', (value) => {
+        nukiId = homebridgeLib.OptionParser.toInt(
+          'nukiId', value, 0, Infinity, true
+        )
+      })
+      .parameter('deviceType', (value) => {
+        deviceType = homebridgeLib.OptionParser.toInt(
+          'deviceType', value, 0, 2, true
+        )
+      })
+      .parse(...args)
     const response = await this.client.lockState(nukiId, deviceType)
     this.print(this.jsonFormatter.stringify(response.body))
   }
@@ -450,17 +495,18 @@ class Main extends homebridgeLib.CommandLineTool {
   async lock (...args) {
     let nukiId
     let deviceType
-    this.parser.parameter('nukiId', (value) => {
-      nukiId = homebridgeLib.OptionParser.toInt(
-        'nukiId', value, 0, Infinity, true
-      )
-    })
-    this.parser.parameter('deviceType', (value) => {
-      deviceType = homebridgeLib.OptionParser.toInt(
-        'deviceType', value, 0, 2, true
-      )
-    })
-    this.parser.parse(...args)
+    this.parser
+      .parameter('nukiId', (value) => {
+        nukiId = homebridgeLib.OptionParser.toInt(
+          'nukiId', value, 0, Infinity, true
+        )
+      })
+      .parameter('deviceType', (value) => {
+        deviceType = homebridgeLib.OptionParser.toInt(
+          'deviceType', value, 0, 2, true
+        )
+      })
+      .parse(...args)
     const response = await this.client.lock(nukiId, deviceType)
     this.print(this.jsonFormatter.stringify(response.body))
   }
@@ -468,17 +514,18 @@ class Main extends homebridgeLib.CommandLineTool {
   async unlock (...args) {
     let nukiId
     let deviceType
-    this.parser.parameter('nukiId', (value) => {
-      nukiId = homebridgeLib.OptionParser.toInt(
-        'nukiId', value, 0, Infinity, true
-      )
-    })
-    this.parser.parameter('deviceType', (value) => {
-      deviceType = homebridgeLib.OptionParser.toInt(
-        'deviceType', value, 0, 2, true
-      )
-    })
-    this.parser.parse(...args)
+    this.parser
+      .parameter('nukiId', (value) => {
+        nukiId = homebridgeLib.OptionParser.toInt(
+          'nukiId', value, 0, Infinity, true
+        )
+      })
+      .parameter('deviceType', (value) => {
+        deviceType = homebridgeLib.OptionParser.toInt(
+          'deviceType', value, 0, 2, true
+        )
+      })
+      .parse(...args)
     const response = await this.client.unlock(nukiId, deviceType)
     this.print(this.jsonFormatter.stringify(response.body))
   }
@@ -487,20 +534,21 @@ class Main extends homebridgeLib.CommandLineTool {
     let nukiId
     let deviceType
     let action
-    this.parser.parameter('nukiId', (value) => {
-      nukiId = homebridgeLib.OptionParser.toInt(
-        'nukiId', value, 0, Infinity, true
-      )
-    })
-    this.parser.parameter('deviceType', (value) => {
-      deviceType = homebridgeLib.OptionParser.toInt(
-        'deviceType', value, 0, 2, true
-      )
-    })
-    this.parser.parameter('action', (value) => {
-      action = homebridgeLib.OptionParser.toInt('action', value, 1, 5, true)
-    })
-    this.parser.parse(...args)
+    this.parser
+      .parameter('nukiId', (value) => {
+        nukiId = homebridgeLib.OptionParser.toInt(
+          'nukiId', value, 0, Infinity, true
+        )
+      })
+      .parameter('deviceType', (value) => {
+        deviceType = homebridgeLib.OptionParser.toInt(
+          'deviceType', value, 0, 2, true
+        )
+      })
+      .parameter('action', (value) => {
+        action = homebridgeLib.OptionParser.toInt('action', value, 1, 5, true)
+      })
+      .parse(...args)
     const response = await this.client.lockAction(nukiId, deviceType, action)
     this.print(this.jsonFormatter.stringify(response.body))
   }
@@ -527,26 +575,29 @@ class Main extends homebridgeLib.CommandLineTool {
   async eventlog (...args) {
     let noWhiteSpace = false
     let mode = 'daemon'
-    this.parser.flag('n', 'noWhiteSpace', () => { noWhiteSpace = true })
-    this.parser.flag('s', 'service', () => { mode = 'service' })
-    this.parser.parse(...args)
+    this.parser
+      .flag('n', 'noWhiteSpace', () => { noWhiteSpace = true })
+      .flag('s', 'service', () => { mode = 'service' })
+      .parse(...args)
     this.setOptions({ mode: mode })
     const jsonFormatter = new homebridgeLib.JsonFormatter({
       sortKeys: true,
       noWhiteSpace: noWhiteSpace
     })
 
-    process.on('SIGINT', () => { this.shutdown('SIGINT') })
-    process.on('SIGTERM', () => { this.shutdown('SIGTERM') })
+    process
+      .on('SIGINT', () => { this.shutdown('SIGINT') })
+      .on('SIGTERM', () => { this.shutdown('SIGTERM') })
 
     this.listener = new NbListener()
-    this.listener.on('listening', (url) => {
-      this.log('listening on %s', url)
-    })
-    this.listener.on('close', (url) => {
-      this.log('closed %s', url)
-    })
-    this.listener.on('error', (error) => { this.error(error) })
+    this.listener
+      .on('error', (error) => { this.error(error) })
+      .on('listening', (url) => {
+        this.log('listening on %s', url)
+      })
+      .on('close', (url) => {
+        this.log('closed %s', url)
+      })
     this.client.on('event', (event) => {
       this.log('%s', jsonFormatter.stringify(event))
     })
@@ -568,10 +619,11 @@ class Main extends homebridgeLib.CommandLineTool {
 
   async callbackRemove (...args) {
     let id
-    this.parser.parameter('id', (value) => {
-      id = homebridgeLib.OptionParser.toInt('id', value, 0, Infinity, true)
-    })
-    this.parser.parse(...args)
+    this.parser
+      .parameter('id', (value) => {
+        id = homebridgeLib.OptionParser.toInt('id', value, 0, Infinity, true)
+      })
+      .parse(...args)
     const response = await this.client.callbackRemove(id)
     this.print(this.jsonFormatter.stringify(response.body))
   }
