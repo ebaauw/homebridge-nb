@@ -7,7 +7,6 @@
 
 'use strict'
 
-const chalk = require('chalk')
 // const fs = require('fs')
 const NbClient = require('../lib/NbClient')
 const NbDiscovery = require('../lib/NbDiscovery')
@@ -15,10 +14,8 @@ const NbListener = require('../lib/NbListener')
 const homebridgeLib = require('homebridge-lib')
 const packageJson = require('../package.json')
 
-const b = chalk.bold
-const u = chalk.underline
-
-class UsageError extends Error {}
+const { b, u } = homebridgeLib.CommandLineTool
+const { UsageError } = homebridgeLib.CommandLineParser
 
 const usage = {
   nb: `${b('nb')} [${b('-hVD')}] [${b('-H')} ${u('hostname')}[${b(':')}${u('port')}]] [${b('-T')} ${u('token')}] [${b('-t')} ${u('timeout')}] ${u('command')} [${u('argument')} ...]`,
@@ -331,6 +328,7 @@ class Main extends homebridgeLib.CommandLineTool {
 
   async main () {
     try {
+      this.usage = usage.nb
       const clargs = this.parseArguments()
       this.jsonFormatter = new homebridgeLib.JsonFormatter({ sortKeys: true })
       if (clargs.command !== 'discover') {
@@ -553,23 +551,23 @@ class Main extends homebridgeLib.CommandLineTool {
     this.print(this.jsonFormatter.stringify(response.body))
   }
 
-  async shutdown (signal) {
-    this.log('Got %s, shutting down', signal)
-    const response = await this.client.callbackList()
-    for (const callback of response.body.callbacks) {
-      if (callback.url === this._callbackUrl) {
-        this.log(
-          'Removing subscription %s for %s', callback.id, callback.url
-        )
-        try {
-          await this.client.callbackRemove(callback.id)
-        } catch (error) {
-          this.error(error)
+  async destroy () {
+    if (this.listener != null) {
+      const response = await this.client.callbackList()
+      for (const callback of response.body.callbacks) {
+        if (callback.url === this._callbackUrl) {
+          this.log(
+            'Removing subscription %s for %s', callback.id, callback.url
+          )
+          try {
+            await this.client.callbackRemove(callback.id)
+          } catch (error) {
+            this.error(error)
+          }
         }
       }
+      this.listener.removeClient(this.client)
     }
-    this.listener.removeClient(this.client)
-    setImmediate(() => { process.exit(0) })
   }
 
   async eventlog (...args) {
@@ -584,10 +582,6 @@ class Main extends homebridgeLib.CommandLineTool {
       sortKeys: true,
       noWhiteSpace: noWhiteSpace
     })
-
-    process
-      .on('SIGINT', () => { this.shutdown('SIGINT') })
-      .on('SIGTERM', () => { this.shutdown('SIGTERM') })
 
     this.listener = new NbListener()
     this.listener
