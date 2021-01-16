@@ -347,7 +347,7 @@ class Main extends homebridgeLib.CommandLineTool {
               error.request.method, error.request.resource
             )
             this.warn(
-              '%s: request %d: error: %s', name, error.requestid, error
+              '%s: request %d: error: %s', name, error.request.id, error
             )
           })
           .on('request', (request) => {
@@ -407,7 +407,7 @@ class Main extends homebridgeLib.CommandLineTool {
           error.request.method, error.request.resource
         )
         this.warn(
-          'nuki server: request %d: error: %s', error.requestid, error
+          'nuki server: request %d: error: %s', error.request.id, error
         )
       })
       .on('request', (request) => {
