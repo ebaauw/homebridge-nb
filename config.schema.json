@@ -13,9 +13,19 @@
         "required": true,
         "default": "Nuki"
       },
+      "address": {
+        "description": "IPv4 address to use for webserver receiving Nuki bridge notifications.  Default: automatically discovered.",
+        "type": "string",
+        "format": "ipv4"
+      },
       "latch": {
         "description": "Expose a second <i>Lock Mechanism</i> service to unlatch a Smart Lock.",
         "type": "boolean"
+      },
+      "port": {
+        "description": "Port to use for webserver receiving Nuki bridge notifications.  Default: random.",
+        "type": "integer",
+        "maximum": 65535
       },
       "timeout":
       {
@@ -25,5 +35,20 @@
         "maximum": 60
       }
     }
-  }
+  },
+  "form": [
+    "name",
+    "latch",
+    {
+      "type": "fieldset",
+      "expandable": true,
+      "title": "Advanced Settings",
+      "description": "Don't change these, unless you understand what you're doing.",
+      "items": [
+        "timeout",
+        "address",
+        "port"
+      ]
+    }
+  ]
 }
