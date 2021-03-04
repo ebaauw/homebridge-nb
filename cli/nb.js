@@ -333,7 +333,7 @@ class Main extends homebridgeLib.CommandLineTool {
       this.jsonFormatter = new homebridgeLib.JsonFormatter({ sortKeys: true })
       if (clargs.command !== 'discover') {
         if (clargs.options.host == null) {
-          this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
+          await this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
         }
         if (clargs.command === 'auth') {
           clargs.options.timeout = 30
@@ -375,7 +375,7 @@ class Main extends homebridgeLib.CommandLineTool {
           if (clargs.options.host !== process.env.NB_HOST) {
             args += ' -H ' + clargs.options.host
           }
-          this.fatal(
+          await this.fatal(
             `Missing token.  Run ${b('nb' + args + ' auth')} and press bridge button.`
           )
         }
@@ -386,7 +386,7 @@ class Main extends homebridgeLib.CommandLineTool {
       this.parser.help('h', 'help', help[clargs.command])
       await this[clargs.command](clargs.args)
     } catch (error) {
-      this.fatal(error)
+      await this.fatal(error)
     }
   }
 
