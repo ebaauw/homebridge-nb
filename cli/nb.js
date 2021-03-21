@@ -336,7 +336,7 @@ class Main extends homebridgeLib.CommandLineTool {
           await this.fatal(`Missing host.  Set ${b('NB_HOST')} or specify ${b('-H')}.`)
         }
         if (clargs.command === 'auth') {
-          clargs.options.timeout = 30
+          clargs.options.timeout = 60
         }
         const name = clargs.options.host
         this.client = new NbClient(clargs.options)
