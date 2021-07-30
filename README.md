@@ -49,9 +49,6 @@ The token is persisted across Homebridge restarts (in the Bridge accessory).
   - Use _Identify_ on the Smart Lock and Opener accessories to force the Bridge
 to contact the device and refresh the cached device state.
 
-### Work in Progress
-Note that this plugin is still under development.
-
 ### Prerequisites
 Homebridge NB communicates with the Nuki Bridge using the local
 [Nuki Bridge HTTP API](https://developer.nuki.io/page/nuki-bridge-http-api-1-12/4).
