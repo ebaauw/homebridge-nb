@@ -22,7 +22,7 @@
     "node": "^14.17.4"
   },
   "dependencies": {
-    "homebridge-lib": "~5.1.11"
+    "homebridge-lib": "~5.1.12-0"
   },
   "scripts": {
     "prepare": "standard",
