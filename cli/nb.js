@@ -403,30 +403,30 @@ class Main extends homebridgeLib.CommandLineTool {
     nbDiscovery
       .on('error', (error) => {
         this.log(
-          'nuki server: request %d: %s %s', error.request.id,
+          '%s: request %d: %s %s', nbDiscovery.name, error.request.id,
           error.request.method, error.request.resource
         )
         this.warn(
-          'nuki server: request %d: error: %s', error.request.id, error
+          '%s: request %d: error: %s', nbDiscovery.name, error.request.id, error
         )
       })
       .on('request', (request) => {
         this.debug(
-          'nuki server: request %d: %s %s', request.id,
+          '%s: request %d: %s %s', nbDiscovery.name, request.id,
           request.method, request.resource
         )
         this.vdebug(
-          'nuki server: request %d: %s %s', request.id,
+          '%s: request %d: %s %s', nbDiscovery.name, request.id,
           request.method, request.url
         )
       })
       .on('response', (response) => {
         this.vdebug(
-          'nuki server: request %d: response: %j', response.request.id,
+          '%s: request %d: response: %j', nbDiscovery.name, response.request.id,
           response.body
         )
         this.debug(
-          'nuki server: request %d: %d %s', response.request.id,
+          '%s: request %d: %d %s', nbDiscovery.name, response.request.id,
           response.statusCode, response.statusMessage
         )
       })
