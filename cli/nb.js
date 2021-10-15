@@ -403,30 +403,30 @@ class Main extends homebridgeLib.CommandLineTool {
     nbDiscovery
       .on('error', (error) => {
         this.log(
-          '%s: request %d: %s %s', nbDiscovery.name, error.request.id,
+          '%s: request %d: %s %s', error.request.name, error.request.id,
           error.request.method, error.request.resource
         )
         this.warn(
-          '%s: request %d: error: %s', nbDiscovery.name, error.request.id, error
+          '%s: request %d: error: %s', error.request.name, error.request.id, error
         )
       })
       .on('request', (request) => {
         this.debug(
-          '%s: request %d: %s %s', nbDiscovery.name, request.id,
+          '%s: request %d: %s %s', request.name, request.id,
           request.method, request.resource
         )
         this.vdebug(
-          '%s: request %d: %s %s', nbDiscovery.name, request.id,
+          '%s: request %d: %s %s', request.name, request.id,
           request.method, request.url
         )
       })
       .on('response', (response) => {
         this.vdebug(
-          '%s: request %d: response: %j', nbDiscovery.name, response.request.id,
+          '%s: request %d: response: %j', response.request.name, response.request.id,
           response.body
         )
         this.debug(
-          '%s: request %d: %d %s', nbDiscovery.name, response.request.id,
+          '%s: request %d: %d %s', response.request.name, response.request.id,
           response.statusCode, response.statusMessage
         )
       })
