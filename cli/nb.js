@@ -77,10 +77,12 @@ Parameters:
   Print debug messages for communication with Nuki bridge.
 
   ${b('-H')} ${u('hostname')}[${b(':')}${u('port')}], ${b('--host=')}${u('hostname')}[${b(':')}${u('port')}]
-  Connect to ${u('hostname')}${b(':8080')} or ${u('hostname')}${b(':')}${u('port')}.
+  Connect to Nuki bridge at ${u('hostname')}${b(':8080')} or ${u('hostname')}${b(':')}${u('port')}.
+  You can also specify the hostname and port in the ${b('NB_HOST')} environment variable.
 
   ${b('-T')} ${u('token')}, ${b('--token=')}${u('token')}
-  Use ${u('token')} instead of the token saved in ${b('~/.nb')}.
+  Use token ${u('token')} to connect to the Nuki bridge.
+  You can also specify the token in the ${b('NB_TOKEN')} environment variable.
 
 Commands:
   ${usage.discover}
@@ -188,8 +190,10 @@ Parameters:
 
   ${u('deviceType')}
   The type of the Nuki device (from ${b('nb list')}):
-    0: smartlock
-    2: opener`,
+    0: Smart Lock 1.0 or 2.0
+    2: Opener
+    3: Smart Door
+    4; Smart Lock 3.0`,
   lock: `${description.lock}
 
 Usage: ${usage.lock}
@@ -203,8 +207,10 @@ Parameters:
 
   ${u('deviceType')}
   The type of the Nuki device (from ${b('nb list')}):
-    0: smartlock
-    2: opener`,
+    0: Smart Lock 1.0 or 2.0
+    2: Opener
+    3: Smart Door
+    4; Smart Lock 3.0`,
   unlock: `${description.unlock}
 
 Usage: ${usage.unlock}
@@ -218,8 +224,10 @@ Parameters:
 
   ${u('deviceType')}
   The type of the Nuki device (from ${b('nb list')}):
-    0: smartlock
-    2: opener`,
+    0: Smart Lock 1.0 or 2.0
+    2: Opener
+    3: Smart Door
+    4; Smart Lock 3.0`,
   lockAction: `${description.lockAction}
 
 Usage: ${usage.lockAction}
@@ -233,12 +241,14 @@ Parameters:
 
   ${u('deviceType')}
   The type of the Nuki device (from ${b('nb list')}):
-    0: smartlock
-    2: opener
+    0: Smart Lock 1.0 or 2.0
+    2: Opener
+    3: Smart Door
+    4; Smart Lock 3.0
 
   ${u('action')}
   The action to send to the Nuki device:
-      smartlock                opener
+      Smart Lock, Smart Door   Opener
     - ------------------------ -------------------------
     1 unlock                   activate rto
     2 lock                     deactivate rto
@@ -376,7 +386,7 @@ class Main extends homebridgeLib.CommandLineTool {
             args += ' -H ' + clargs.options.host
           }
           await this.fatal(
-            `Missing token.  Run ${b('nb' + args + ' auth')} and press bridge button.`
+            `Missing token.  Set ${b('NB_TOKEN')} or specify ${b('-T')}.  Run ${b('nb' + args + ' auth')} to obtain the token.`
           )
         }
       }
