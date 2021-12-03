@@ -193,7 +193,7 @@ Parameters:
     0: Smart Lock 1.0 or 2.0
     2: Opener
     3: Smart Door
-    4; Smart Lock 3.0`,
+    4: Smart Lock 3.0`,
   lock: `${description.lock}
 
 Usage: ${usage.lock}
@@ -210,7 +210,7 @@ Parameters:
     0: Smart Lock 1.0 or 2.0
     2: Opener
     3: Smart Door
-    4; Smart Lock 3.0`,
+    4: Smart Lock 3.0`,
   unlock: `${description.unlock}
 
 Usage: ${usage.unlock}
@@ -227,7 +227,7 @@ Parameters:
     0: Smart Lock 1.0 or 2.0
     2: Opener
     3: Smart Door
-    4; Smart Lock 3.0`,
+    4: Smart Lock 3.0`,
   lockAction: `${description.lockAction}
 
 Usage: ${usage.lockAction}
@@ -244,7 +244,7 @@ Parameters:
     0: Smart Lock 1.0 or 2.0
     2: Opener
     3: Smart Door
-    4; Smart Lock 3.0
+    4: Smart Lock 3.0
 
   ${u('action')}
   The action to send to the Nuki device:
