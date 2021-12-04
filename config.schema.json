@@ -22,8 +22,7 @@
         "type": "integer",
         "maximum": 65535
       },
-      "timeout":
-      {
+      "timeout": {
         "description": "The timeout in seconds to wait for a response from a Nuki bridge.  Default: 15.",
         "type": "integer",
         "minimum": 1,
