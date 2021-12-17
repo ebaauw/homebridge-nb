@@ -27,6 +27,7 @@ const usage = {
   getlog: `${b('getlog')} [${b('-h')}]`,
   clearlog: `${b('clearlog')} [${b('-h')}]`,
   reboot: `${b('reboot')} [${b('-h')}]`,
+  fwupdate: `${b('fwupdate')} [${b('-h')}]`,
   list: `${b('list')} [${b('-h')}]`,
 
   lockState: `${b('lockState')} [${b('-h')}] ${u('nukiId')} ${u('deviceType')}`,
@@ -49,6 +50,7 @@ const description = {
   getlog: 'Get Nuki bridge log.',
   clearlog: 'Clear Nuki bridge log.',
   reboot: 'Reboot Nuki bridge.',
+  fwupdate: 'Trigger a firmware update of the bridge and connected devices.',
   list: 'Get list of paired Nuki devices.',
 
   lockState: 'Refresh state from paired Nuki device.',
@@ -102,6 +104,9 @@ Commands:
 
   ${usage.reboot}
   ${description.reboot}
+
+  ${usage.fwupdate}
+  ${description.fwupdate}
 
   ${usage.list}
   ${description.list}
@@ -166,6 +171,13 @@ Parameters:
   reboot: `${description.reboot}
 
 Usage: ${usage.reboot}
+
+Parameters:
+  ${b('-h')}, ${b('--help')}
+  Print this help and exit.`,
+  fwupdate: `${description.fwupdate}
+
+Usage: ${usage.fwupdate}
 
 Parameters:
   ${b('-h')}, ${b('--help')}
@@ -472,6 +484,12 @@ class Main extends homebridgeLib.CommandLineTool {
   async reboot (...args) {
     this.parser.parse(...args)
     const response = await this.client.reboot()
+    this.print(this.jsonFormatter.stringify(response.body))
+  }
+
+  async fwupdate (...args) {
+    this.parser.parse(...args)
+    const response = await this.client.fwupdate()
     this.print(this.jsonFormatter.stringify(response.body))
   }
 
