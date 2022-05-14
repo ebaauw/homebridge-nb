@@ -605,10 +605,10 @@ class Main extends homebridgeLib.CommandLineTool {
       .flag('n', 'noWhiteSpace', () => { noWhiteSpace = true })
       .flag('s', 'service', () => { mode = 'service' })
       .parse(...args)
-    this.setOptions({ mode: mode })
+    this.setOptions({ mode })
     const jsonFormatter = new homebridgeLib.JsonFormatter({
       sortKeys: true,
-      noWhiteSpace: noWhiteSpace
+      noWhiteSpace
     })
 
     this.listener = new NbListener()
