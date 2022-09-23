@@ -22,6 +22,12 @@
         "type": "integer",
         "maximum": 65535
       },
+      "openerResetTimeout": {
+        "description": "The timeout in milliseconds to wait before resetting the Opener to locked.  Default: 500.  Set to 0 to keep the Opener unlocked.",
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2000
+      },
       "timeout": {
         "description": "The timeout in seconds to wait for a response from a Nuki bridge.  Default: 15.",
         "type": "integer",
@@ -39,6 +45,7 @@
       "title": "Advanced Settings",
       "description": "Don't change these, unless you understand what you're doing.",
       "items": [
+        "openerResetTimeout",
         "timeout",
         "port"
       ]
