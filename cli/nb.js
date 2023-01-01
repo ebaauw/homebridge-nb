@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // homebridge-nb/cli/nb.js
-// Copyright © 2020-2022 Erik Baauw. All rights reserved.
+// Copyright © 2020-2023 Erik Baauw. All rights reserved.
 //
 // Homebridge plug-in for Nuki Bridge.
 

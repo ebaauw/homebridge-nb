@@ -16,7 +16,7 @@
 </span>
 
 ## Homebridge plugin for Nuki Bridge
-Copyright © 2020-2022 Erik Baauw. All rights reserved.
+Copyright © 2020-2023 Erik Baauw. All rights reserved.
 
 This [Homebridge](https://github.com/homebridge/homebridge) plugin exposes
 [Nuki Smart Lock](https://nuki.io/nl/smart-lock/) and
