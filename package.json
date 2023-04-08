@@ -19,13 +19,12 @@
   },
   "engines": {
     "homebridge": "^1.6.0",
-    "node": "^18.15.0"
+    "node": "^18.15.0",
+    "nuki": "2.15.0"
   },
   "dependencies": {
-    "homebridge-lib": "~6.3.13"
-  },
-  "optionalDependencies": {
-    "sodium-plus": "~0.9.0"
+    "homebridge-lib": "~6.3.13",
+    "hb-nb-tools": "~1.0.0"
   },
   "scripts": {
     "prepare": "standard",
