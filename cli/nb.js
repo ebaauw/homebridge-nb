@@ -18,7 +18,7 @@ const { b, u } = homebridgeLib.CommandLineTool
 const { UsageError } = homebridgeLib.CommandLineParser
 
 const usage = {
-  nb: `${b('nb')} [${b('-hVD')}] [${b('-H')} ${u('hostname')}[${b(':')}${u('port')}]] [${b('-T')} ${u('token')}] [${b('-t')} ${u('timeout')}] ${u('command')} [${u('argument')} ...]`,
+  nb: `${b('nb')} [${b('-hVD')}] [${b('-H')} ${u('hostname')}[${b(':')}${u('port')}]] [${b('-T')} ${u('token')}] [${b('-E')} [${b('none')}|${b('hasedToken')}|${b('encryptedToken')}]] [${b('-t')} ${u('timeout')}] ${u('command')} [${u('argument')} ...]`,
 
   discover: `${b('discover')} [${b('-h')}] [${b('-t')} ${u('timeout')}]`,
 
@@ -85,6 +85,13 @@ Parameters:
   ${b('-T')} ${u('token')}, ${b('--token=')}${u('token')}
   Use token ${u('token')} to connect to the Nuki bridge.
   You can also specify the token in the ${b('NB_TOKEN')} environment variable.
+
+  ${b('-E')} [${b('none')}|${b('hasedToken')}|${b('encryptedToken')}], ${b('--encryption=')}[${b('none')}|${b('hasedToken')}|${b('encryptedToken')}]
+  Use encryption method for communication with the Nuki bridge.
+  The default is ${b('hashedToken')}.
+
+  ${b('-t')} ${u('timeout')}
+  Set timeout to ${u('timeout')} seconds instead of default ${b('5')}.
 
 Commands:
   ${usage.discover}
@@ -336,6 +343,14 @@ class Main extends homebridgeLib.CommandLineTool {
         clargs.options.token = homebridgeLib.OptionParser.toString(
           'token', value, true, true
         )
+      })
+      .option('E', 'encryption', (value) => {
+        clargs.options.encryption = homebridgeLib.OptionParser.toString(
+          'encryption', value, true, true
+        )
+        if (!['none', 'hashedToken', 'encryptedToken'].includes(clargs.options.encryption)) {
+          throw new UsageError(`${value}: invalid encryption value`)
+        }
       })
       .parameter('command', (value) => {
         if (usage[value] == null || typeof this[value] !== 'function') {
