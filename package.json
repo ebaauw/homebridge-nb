@@ -22,7 +22,9 @@
     "node": "^18.15.0"
   },
   "dependencies": {
-    "homebridge-lib": "~6.3.13",
+    "homebridge-lib": "~6.3.13"
+  },
+  "optionalDependencies": {
     "sodium-plus": "~0.9.0"
   },
   "scripts": {
