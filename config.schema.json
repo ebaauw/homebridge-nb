@@ -13,6 +13,16 @@
         "required": true,
         "default": "Nuki"
       },
+      "devices": {
+        "title": "Device",
+        "description": "Whitelisted Nuki devices (default: all).<br>Make sure to include the Nuki bridge to which the device is connected.",
+        "type": "array",
+        "items": {
+          "title": "Device",
+          "description": "Nuki ID of the device.",
+          "type": "integer"
+        }
+      },
       "latch": {
         "description": "Expose a second <i>Lock Mechanism</i> service to unlatch a Smart Lock.",
         "type": "boolean"
@@ -45,6 +55,30 @@
       "title": "Advanced Settings",
       "description": "Don't change these, unless you understand what you're doing.",
       "items": [
+        {
+          "type": "help",
+          "helpvalue": "Devices"
+        },
+        {
+          "nodescription": true,
+          "notitle": true,
+          "key": "devices",
+          "type": "array",
+          "items": [
+            {
+              "type": "div",
+              "displayFlex": true,
+              "flex-direction": "row",
+              "items": [
+                {
+                  "key": "devices[]",
+                  "required": true,
+                  "flex": "1 1 50px"
+                }
+              ]
+            }
+          ]
+        },
         "openerResetTimeout",
         "timeout",
         "port"
