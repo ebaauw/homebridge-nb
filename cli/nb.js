@@ -8,5 +8,6 @@
 'use strict'
 
 const { NbTool } = require('hb-nb-tools')
+const pkgJson = require('../package.json')
 
-new NbTool(require('../package.json')).main()
+new NbTool(pkgJson).main()
