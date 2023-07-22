@@ -19,12 +19,12 @@
   },
   "engines": {
     "homebridge": "^1.6.1",
-    "node": "^18.16.1",
+    "node": "18.17.0||^18||^16",
     "nuki": "2.15.0"
   },
   "dependencies": {
-    "homebridge-lib": "~6.3.18",
-    "hb-nb-tools": "~1.1.3"
+    "homebridge-lib": "~6.4.0",
+    "hb-nb-tools": "~1.1.4"
   },
   "scripts": {
     "prepare": "standard",
