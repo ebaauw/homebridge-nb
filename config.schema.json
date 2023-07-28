@@ -38,6 +38,10 @@
         "minimum": 0,
         "maximum": 2000
       },
+      "removeStaleAccessories": {
+        "description": "Remove stale accessories, whose devices are no longer exposed by a Nuki bridge.",
+        "type": "boolean"
+      },
       "timeout": {
         "description": "The timeout in seconds to wait for a response from a Nuki bridge.  Default: 15.",
         "type": "integer",
@@ -80,8 +84,9 @@
           ]
         },
         "openerResetTimeout",
-        "timeout",
-        "port"
+        "port",
+        "removeStaleAccessories",
+        "timeout"
       ]
     }
   ]
