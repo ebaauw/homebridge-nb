@@ -23,8 +23,8 @@
     "nuki": "2.17.0"
   },
   "dependencies": {
-    "homebridge-lib": "~6.7.4",
-    "hb-nb-tools": "~1.1.12"
+    "homebridge-lib": "~6.7.5",
+    "hb-nb-tools": "~1.1.13"
   },
   "scripts": {
     "prepare": "standard",
