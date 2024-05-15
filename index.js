@@ -3,11 +3,15 @@
 //
 // Homebridge plug-in for Nuki Bridge.
 
-'use strict'
+import { createRequire } from 'node:module'
 
-const NbPlatform = require('./lib/NbPlatform')
+import { NbPlatform } from './lib/NbPlatform.js'
+
+const require = createRequire(import.meta.url)
 const packageJson = require('./package.json')
 
-module.exports = (homebridge) => {
+function main (homebridge) {
   NbPlatform.loadPlatform(homebridge, packageJson, 'NB', NbPlatform)
 }
+
+export { main as default }

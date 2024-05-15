@@ -5,9 +5,11 @@
 // Homebridge NB Tools.
 // Copyright © 2018-2024 Erik Baauw. All rights reserved.
 
-'use strict'
+import { createRequire } from 'node:module'
 
-const { NbTool } = require('hb-nb-tools')
-const pkgJson = require('../package.json')
+import { NbTool } from 'hb-nb-tools/NbTool'
 
-new NbTool(pkgJson).main()
+const require = createRequire(import.meta.url)
+const packageJson = require('../package.json')
+
+new NbTool(packageJson).main()
