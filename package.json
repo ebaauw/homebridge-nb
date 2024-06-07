@@ -19,7 +19,7 @@
     "nb": "cli/nb.js"
   },
   "engines": {
-    "homebridge": "^1.8.1",
+    "homebridge": "^1.8.2",
     "node": "^20||^18",
     "nuki": "2.18.0"
   },
