@@ -3,6 +3,9 @@
   "description": "Homebridge plugin for Nuki Bridge",
   "displayName": "Homebridge NB",
   "author": "Erik Baauw",
+  "maintainers": [
+    "ebaauw"
+  ],
   "license": "Apache-2.0",
   "version": "1.4.21",
   "keywords": [
