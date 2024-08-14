@@ -23,6 +23,31 @@
           "type": "integer"
         }
       },
+      "encryption": {
+        "description": "Encryption for Nuki bridge token.  Default: Encrypted.",
+        "type": "string",
+        "required": true,
+        "oneOf": [
+          {
+            "title": "None",
+            "enum": [
+              "none"
+            ]
+          },
+          {
+            "title": "Hashed Token",
+            "enum": [
+              "hashedToken"
+            ]
+          },
+          {
+            "title": "Encrypted Token",
+            "enum": [
+              "encryptedToken"
+            ]
+          }
+        ]
+      },
       "latch": {
         "description": "Expose a second <i>Lock Mechanism</i> service to unlatch a Smart Lock.",
         "type": "boolean"
@@ -83,6 +108,7 @@
             }
           ]
         },
+        "encryption",
         "openerResetTimeout",
         "port",
         "removeStaleAccessories",
