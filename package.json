@@ -23,12 +23,12 @@
   },
   "engines": {
     "homebridge": "^1.8.4||^2.0.0-beta",
-    "node": "^20||^18",
+    "node": "^22||^20||^18",
     "nuki": "2.18.0"
   },
   "dependencies": {
-    "homebridge-lib": "~7.0.8",
-    "hb-nb-tools": "~2.0.5"
+    "homebridge-lib": "~7.0.9",
+    "hb-nb-tools": "~2.0.6"
   },
   "scripts": {
     "prepare": "standard",
