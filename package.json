@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "homebridge-lib": "~7.1.0",
-    "hb-nb-tools": "~2.0.7"
+    "hb-nb-tools": "~2.0.8"
   },
   "scripts": {
     "prepare": "standard",
