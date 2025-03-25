@@ -13,6 +13,32 @@
         "required": true,
         "default": "Nuki"
       },
+      "bridges": {
+        "title": "Bridges",
+        "description": "Nuki bridges (default: discovered automatically).",
+        "type": "array",
+        "items": {
+          "title": "Bridge",
+          "description": "Nuki bridge configuration.",
+          "required": true,
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bridgeId": {
+              "title": "Bridge ID",
+              "description": "Nuki ID of the bridge.",
+              "type": "string",
+              "required": true
+            },
+            "host": {
+              "title": "Host",
+              "description": "IP address or hostname of the bridge.",
+              "type": "string",
+              "required": true
+            }
+          }
+        }
+      },
       "devices": {
         "title": "Device",
         "description": "Whitelisted Nuki devices (default: all).<br>Make sure to include the Nuki bridge to which the device is connected.",
@@ -20,7 +46,7 @@
         "items": {
           "title": "Device",
           "description": "Nuki ID of the device.",
-          "type": "integer"
+          "type": "string"
         }
       },
       "encryption": {
@@ -79,15 +105,35 @@
     "name",
     "latch",
     {
+      "nodescription": true,
+      "notitle": true,
+      "key": "bridges",
+      "type": "array",
+      "items": [
+        {
+          "type": "div",
+          "displayFlex": true,
+          "items": [
+            {
+              "key": "bridges[].bridgeId",
+              "required": true,
+              "flex": "1 1 50px"
+            },
+            {
+              "key": "bridges[].host",
+              "required": true,
+              "flex": "1 1 50px"
+            }
+          ]
+        }
+      ]
+    },
+{
       "type": "fieldset",
       "expandable": true,
       "title": "Advanced Settings",
       "description": "Don't change these, unless you understand what you're doing.",
       "items": [
-        {
-          "type": "help",
-          "helpvalue": "Devices"
-        },
         {
           "nodescription": true,
           "notitle": true,
@@ -97,7 +143,6 @@
             {
               "type": "div",
               "displayFlex": true,
-              "flex-direction": "row",
               "items": [
                 {
                   "key": "devices[]",
