@@ -22,13 +22,13 @@
     "nb": "cli/nb.js"
   },
   "engines": {
-    "homebridge": "^1.10.0||^2.0.0-beta",
+    "homebridge": "^1.11.0||^2.0.0-beta",
     "node": "^22||^20",
     "nuki": "2.18.0"
   },
   "dependencies": {
-    "homebridge-lib": "~7.1.6",
-    "hb-nb-tools": "~2.0.14"
+    "homebridge-lib": "~7.1.8",
+    "hb-nb-tools": "~2.0.16"
   },
   "scripts": {
     "prepare": "standard",
