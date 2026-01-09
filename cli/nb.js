@@ -3,7 +3,7 @@
 // nb.js
 //
 // Homebridge NB Tools.
-// Copyright © 2018-2025 Erik Baauw. All rights reserved.
+// Copyright © 2018-2026 Erik Baauw. All rights reserved.
 
 import { createRequire } from 'node:module'
 
