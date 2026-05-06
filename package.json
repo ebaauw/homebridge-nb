@@ -22,12 +22,12 @@
     "nb": "cli/nb.js"
   },
   "engines": {
-    "homebridge": "^2.0.0",
+    "homebridge": "^2.0.1",
     "node": "^24||^22",
     "nuki": "2.18.0"
   },
   "dependencies": {
-    "homebridge-lib": "~8.0.1",
+    "homebridge-lib": "~8.1.0",
     "hb-nb-tools": "~2.1.1"
   },
   "scripts": {
